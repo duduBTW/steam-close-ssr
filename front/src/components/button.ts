@@ -23,7 +23,7 @@ function makeAction(action: string, method: string) {
 }
 
 @customElement("steam-action")
-export class WishlistAction extends LitElementWithTwind() {
+export class SteamAction extends LitElementWithTwind() {
   @property({ type: String })
   action: string = "";
 
@@ -35,7 +35,7 @@ export class WishlistAction extends LitElementWithTwind() {
 
   constructor() {
     super();
-    this.addEventListener("click", this._wishListGame);
+    this.addEventListener("click", this._handleAction);
   }
 
   protected render() {
@@ -47,9 +47,8 @@ export class WishlistAction extends LitElementWithTwind() {
     </div>`;
   }
 
-  private async _wishListGame(e: Event) {
+  private async _handleAction(e: Event) {
     e.preventDefault();
-    console.log("ababab");
 
     if (this.isLoading) {
       return;
@@ -71,6 +70,7 @@ export class WishlistAction extends LitElementWithTwind() {
 
       this.innerHTML = innerHTML;
     } catch {
+      // TODO - do smt when stuff goes bad? ＞︿＜
     } finally {
       buttonElement?.removeAttribute("disabled");
       this.isLoading = false;
@@ -89,21 +89,5 @@ export class LoadingContent extends LitElementWithTwind() {
       <div class="absolute w-full h-full bg-zinc-900/60 backdrop-blur rounded grid place-items-center z-20">
         <i class="ri-loader-fill animate-spin"></i>
       </divc>`;
-  }
-}
-
-@customElement("loading-button-overlay")
-export class LoadingButtonOverlay extends LitElementWithTwind() {
-  protected render() {
-    return html` <link
-        href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css"
-        rel="stylesheet"
-      />
-
-      <div
-        class="absolute w-full h-full bg-zinc-900/60 backdrop-blur rounded grid place-items-center z-20"
-      >
-        <i class="ri-loader-fill animate-spin"></i>
-      </div>`;
   }
 }
