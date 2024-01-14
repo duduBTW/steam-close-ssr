@@ -1,0 +1,31 @@
+package game
+
+import (
+	"strconv"
+	"github.com/duduBTW/steam-ssr/data"
+)
+
+type FastSearchProps struct {
+	Games []data.Game
+}
+
+templ FastSearch(props FastSearchProps) {
+	<div class="p-3 rounded-b bg-gray-800 flex flex-col gap-3 w-80">
+		for _, game := range props.Games {
+			@FastSearchGameCart(game)
+		}
+		<a href="/search" class="no-underline hover:text-cyan-200 text-cyan-400 text-sm flex justify-between items-baseline">
+			<span>
+				View all
+			</span>
+			<i class="ri-arrow-drop-right-line w-3 h-3"></i>
+		</a>
+	</div>
+}
+
+templ FastSearchGameCart(game data.Game) {
+	<a href={ templ.URL("/game/" + strconv.Itoa(game.GameId)) } class="flex items-center gap-2">
+		<img src={ game.CoverImage } class="rounded aspect-video rounded object-cover w-24"/>
+		<div>{ game.Name }</div>
+	</a>
+}

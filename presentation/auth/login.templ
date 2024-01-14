@@ -1,0 +1,26 @@
+package auth
+
+import (
+	"github.com/duduBTW/steam-ssr/components"
+)
+
+templ LoginPage() {
+	@components.EmptyLayout("Login") {
+		<div class="flex items-center justify-center h-full w-full">
+			<steam-form>
+				<form method="POST" action="/api/login" class="bg-gray-800 rounded-lg p-5 flex flex-col gap-6 w-80">
+					<h1>Login</h1>
+					@components.Input(components.InputProps{
+						Name: "UserName",
+						Label: "UserName",
+					})
+					<steam-form-submit>
+						@components.Button("primary") {
+							Login
+						}
+					</steam-form-submit>
+				</form>
+			</steam-form>
+		</div>
+	}
+}

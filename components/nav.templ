@@ -1,0 +1,130 @@
+package components
+
+templ Nav() {
+	<nav class="bg-gray-900/40 backdrop-blur-md p-3 flex items-start sticky top-0 z-10 gap-2">
+		<a href="/">
+			Steam
+		</a>
+		<div class="ml-auto"></div>
+		<steam-search>
+			<div href="/search" id="search-trigger" class="h-9 flex items-center justify-center px-3 rounded-t bg-gray-800" id="dropdown-trigger">
+				<i class="ri-search-2-line"></i>
+			</div>
+		</steam-search>
+		<a href="/cart" class="h-9 flex gap-3 items-center justify-center px-3 rounded-t bg-gray-800" id="dropdown-trigger">
+			<i class="ri-shopping-bag-line"></i>
+			if hasCartCount(ctx) {
+				<div class="text-sm text-gray-500 font-bold">
+					{ getCartCount(ctx) }
+				</div>
+			}
+		</a>
+		if isAuthenticated(ctx) {
+			@NavFriendsDropdown()
+			@NavNotificationsDropdown()
+			@NavProfileDropdown()
+		} else {
+			<a href={ templ.SafeURL("/login" + generateRedirectUrl(ctx)) }>
+				@Button("primary") {
+					Log inp
+				}
+			</a>
+		}
+	</nav>
+}
+
+templ NavProfileDropdown() {
+	<steam-dropdown>
+		<a href="/profile" class="px-3 h-9 flex items-center rounded-t bg-gray-800 items-center gap-2" id="dropdown-trigger">
+			<img src={ getProfilePicture(ctx) } class="w-6 h-6 rounded-full"/>
+			<div><span>{ GetUserName(ctx) }</span> <span class="text-sm text-gray-400">$100.00</span></div>
+			<i class="ri-arrow-drop-down-line"></i>
+		</a>
+		<dropdown-content class="hidden">
+			@UserDropDownItem() {
+				Account Details
+			}
+			@UserDropDownItem() {
+				Wallet
+			}
+			@UserDropDownItem() {
+				Settings
+			}
+			@UserDropDownItem() {
+				Client Updates
+			}
+			@UserDropDownItem() {
+				Change Account
+			}
+			<div class="w-full h-px bg-gray-700 my-1"></div>
+			@UserDropDownItem() {
+				Go Offline
+			}
+			<a href={ templ.SafeURL("/api/logout" + generateRedirectUrl(ctx)) }>
+				@UserDropDownItem() {
+					Sign Out
+				}
+			</a>
+		</dropdown-content>
+	</steam-dropdown>
+}
+
+templ UserDropDownItem() {
+	<button
+		class="px-3 py-1 hover:bg-gray-700 w-full rounded text-start text-sm"
+	>
+		{ children... }
+	</button>
+}
+
+templ NavNotificationsDropdown() {
+	<steam-dropdown>
+		<a href="/notifications" class="h-9 flex items-center justify-center px-3 rounded-t bg-gray-800" id="dropdown-trigger">
+			<i class="ri-notification-3-fill"></i>
+		</a>
+		<dropdown-content class="hidden">
+			<div class="w-56 p-2 flex flex-col gap-2">
+				<p class="text-sm font-medium text-gray-300">Notifications</p>
+				<div class="bg-gray-900 text-sm rounded p-2">
+					Your friend left a comment on your profile
+				</div>
+				<div class="bg-gray-900 text-sm rounded p-2">
+					Something happened! what? dunno.
+				</div>
+				<a href="/notifications" class="no-underline hover:text-cyan-200 text-cyan-400 text-sm flex justify-between items-baseline">
+					<span>
+						View all
+					</span>
+					<i class="ri-arrow-drop-right-line"></i>
+				</a>
+			</div>
+		</dropdown-content>
+	</steam-dropdown>
+}
+
+templ NavFriendsDropdown() {
+	<steam-dropdown>
+		<a href="/notifications" class="h-9 flex items-center justify-center px-3 rounded-t bg-gray-800" id="dropdown-trigger">
+			<i class="ri-team-fill"></i>
+		</a>
+		<dropdown-content class="hidden">
+			<div class="w-64 flex flex-col gap-2 p-3">
+				<div class="h-9 flex items-center rounded-t bg-gray-800 items-center gap-3">
+					<img src="https://pbs.twimg.com/profile_images/1620171210352128000/sOhJS_q8_400x400.jpg" class="w-8 h-8 rounded-full"/>
+					<div class="flex flex-col">
+						<div>dudubtw</div>
+						<div class="text-xs text-gray-300">Online</div>
+					</div>
+				</div>
+				<p class="text-sm font-medium text-gray-300 mt-2">In game</p>
+				<div class="h-9 flex items-center rounded-t bg-gray-800 items-center gap-3">
+					<img src="https://pbs.twimg.com/profile_images/1677580920037994497/jDY74-en_400x400.jpg" class="w-8 h-8 rounded-full"/>
+					<div class="flex flex-col">
+						<div>savi’s whining corner</div>
+						<div class="text-xs text-gray-300">Playing Guuilty Gear Strive</div>
+					</div>
+				</div>
+			</div>
+		</dropdown-content>
+	</steam-dropdown>
+}

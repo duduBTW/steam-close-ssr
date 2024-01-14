@@ -1,0 +1,99 @@
+package cart
+
+import (
+	"strconv"
+	"github.com/duduBTW/steam-ssr/components"
+	"github.com/duduBTW/steam-ssr/data"
+)
+
+type Props struct {
+	Games []data.CartGame
+	Total string
+}
+
+templ CartPage(props Props) {
+	@components.Layout("Cart") {
+		<div class="container mx-auto px-4 mt-4">
+			if len(props.Games) > 0 {
+				@CartContent(props)
+			} else {
+				@CartEmpty()
+			}
+		</div>
+	}
+}
+
+templ CartContent(props Props) {
+	<h1 class="mb-4">
+		{ components.GetUserName(ctx) } shopping cart
+	</h1>
+	<div class="flex flex-col gap-3">
+		@CartGameList(props)
+		@CartTotalCart(props.Total)
+	</div>
+}
+
+templ CartGameList(props Props) {
+	for _, game := range props.Games {
+		@CartGameCard(game)
+	}
+}
+
+templ CartGameCard(props data.CartGame) {
+	<div class="rounded-lg bg-gray-800 flex items-center gap-4 px-4 py-3">
+		<img src={ props.CoverImage } class="w-40 aspect-video rounded-md object-cover"/>
+		<div class="text-lg font-medium">{ props.Title }</div>
+		<div class="ml-auto"></div>
+		<div>{ props.Price }</div>
+		<steam-action action={ "/api/cart/delete?CartGameId=" + strconv.Itoa(props.CartGameId) } method="GET">
+			@components.Button("secondary") {
+				<i class="ri-delete-bin-7-line"></i>
+				Delete
+			}
+		</steam-action>
+	</div>
+}
+
+templ CartTotalCart(total string) {
+	<div class="rounded-lg bg-gray-800 px-4 py-3 flex flex-col gap-10">
+		<div class="flex items-center gap-4">
+			<div class="text-lg font-medium">Estimated total</div>
+			<div class="ml-auto"></div>
+			<div>{ total }</div>
+			<steam-action action="/api/cart/clear" method="GET">
+				@components.Button("secondary") {
+					<i class="ri-delete-bin-7-line"></i>
+					Clean
+				}
+			</steam-action>
+		</div>
+		<div class="flex gap-3">
+			@components.Button("secondary") {
+				Continue shopping
+			}
+			<div class="ml-auto"></div>
+			@components.Button("secondary") {
+				Purchase as a Gift
+			}
+			@components.Button("primary") {
+				Purchase for Myself
+			}
+		</div>
+	</div>
+}
+
+templ CartEmpty() {
+	<div class="flex flex-col items-center gap-8">
+		<div class="text-3xl text-gray-600">
+			{ "~(>_<。)\\" }
+		</div>
+		<h1 class="text-lg font-bold">
+			You don't have anything on your cart yet
+		</h1>
+		<a href="/">
+			@components.Button("primary") {
+				browse games
+			}
+		</a>
+	</div>
+}

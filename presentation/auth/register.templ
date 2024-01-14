@@ -1,0 +1,34 @@
+package auth
+
+import (
+	"github.com/duduBTW/steam-ssr/components"
+)
+
+templ RegisterPage() {
+	@components.EmptyLayout("Login") {
+		<div class="flex items-center justify-center h-full w-full">
+			<steam-form>
+				<form method="POST" action="/api/register" class="bg-gray-800 rounded-lg p-5 flex flex-col gap-6 w-80">
+					<h1>Register</h1>
+					@components.Input(components.InputProps{
+						Name: "UserName",
+						Label: "UserName",
+					})
+					@components.Input(components.InputProps{
+						Name: "DisplayName",
+						Label: "Display name",
+					})
+					@components.Input(components.InputProps{
+						Name: "ProfilePicture",
+						Label: "Profile picture url",
+					})
+					<steam-form-submit>
+						@components.Button("primary") {
+							Register
+						}
+					</steam-form-submit>
+				</form>
+			</steam-form>
+		</div>
+	}
+}

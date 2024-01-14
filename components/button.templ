@@ -1,0 +1,25 @@
+package components
+
+import (
+	"strconv"
+)
+
+type ButtonVariant string
+
+templ Button(variant ButtonVariant) {
+	<button
+		class={ "h-9 px-4 py-2 inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50", templ.KV("bg-blue-700 hover:bg-blue-800 active:bg-blue-900", variant == "primary"), templ.KV("border border-gray-700 text-gray-300 hover:bg-gray-700 active:bg-gray-600", variant == "secondary") }
+	>
+		{ children... }
+	</button>
+}
+
+templ WishlistButton(gameId int) {
+	if isAuthenticated(ctx) {
+		<wishlist-action gameId={ strconv.Itoa(gameId) }>
+			@Button("secondary") {
+				{ children... }
+			}
+		</wishlist-action>
+	}
+}

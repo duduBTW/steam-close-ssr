@@ -1,0 +1,27 @@
+package components
+
+templ EmptyLayout(title string) {
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link href="/static/output.css" rel="stylesheet"/>
+			<link
+				href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css"
+				rel="stylesheet"
+			/>
+			<title>{ title }</title>
+		</head>
+		<body>
+			{ children... }
+			<script type="module" src="/front/bundle.js"></script>
+		</body>
+	</html>
+}
+
+templ Layout(title string) {
+	@EmptyLayout(title) {
+		@Nav()
+		{ children... }
+	}
+}

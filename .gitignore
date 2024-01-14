@@ -1,0 +1,6 @@
+steam.db
+.version
+**_templ.go
+**node_modules
+front/dist
+.vscode

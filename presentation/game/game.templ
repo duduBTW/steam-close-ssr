@@ -1,0 +1,97 @@
+package game
+
+import (
+	"strconv"
+	"github.com/duduBTW/steam-ssr/components"
+	"github.com/duduBTW/steam-ssr/data"
+)
+
+type Props struct {
+	Game         data.Game
+	IsGameOnCart bool
+}
+
+templ GamePage(props Props) {
+	@components.Layout(props.Game.Name) {
+		<div class="container mx-auto px-4 mt-4 flex flex-col gap-2">
+			@Title(props)
+			@Header(props)
+			@BuyAction(props)
+		</div>
+	}
+}
+
+templ Section(className string) {
+	<div class={ "rounded-lg bg-gray-800 flex gap-3 py-2 px-4", className }>
+		{ children... }
+	</div>
+}
+
+templ Title(props Props) {
+	@Section("items-center") {
+		<h1 class="text-lg font-medium">
+			{ props.Game.Name }
+		</h1>
+		<div class="flex gap-2 ml-auto">
+			<steam-action action="/api/game/wishlist" method="GET">
+				@components.Button("secondary") {
+					<i class="ri-heart-2-line"></i>
+					Wishlist
+				}
+			</steam-action>
+			@components.Button("secondary") {
+				Browse All DLCs
+			}
+			@components.Button("secondary") {
+				Community Hub
+			}
+		</div>
+	}
+}
+
+templ Header(props Props) {
+	@Section("gap-4") {
+		<div class="flex-[2.2] flex flex-col gap-2 min-w-0">
+			<img src={ props.Game.Images[0].Large } class="w-full h-full object-cover rounded-md aspect-video"/>
+			<div class="flex flex-nowrap gap-2 overflow-x-auto pb-1">
+				for _, image := range props.Game.Images {
+					<div class="w-40 shrink-0">
+						<img class="aspect-video object-cover rounded w-full h-full" src={ image.Small }/>
+					</div>
+				}
+			</div>
+		</div>
+		<div class="flex-[1] flex flex-col gap-3">
+			<img src={ props.Game.CoverImage } class="w-full object-cover rounded-md aspect-video"/>
+			<p class="text-gray-400 line-clamp-5">
+				{ props.Game.Description }
+			</p>
+		</div>
+	}
+}
+
+templ BuyAction(props Props) {
+	<div class="flex gap-2">
+		@Section("items-center flex-[2.2]") {
+			<div class="font-bold">
+				{ props.Game.Name }
+			</div>
+			<div class="ml-auto"></div>
+			{ props.Game.Price }
+			if props.IsGameOnCart {
+				<a href="/cart">
+					@components.Button("primary") {
+						On cart
+					}
+				</a>
+			} else {
+				<steam-action method="GET" action={ "/api/cart?GameId=" + strconv.Itoa(props.Game.GameId) }>
+					@components.Button("primary") {
+						Add to cart
+					}
+				</steam-action>
+			}
+		}
+		@Section("flex-1")
+	</div>
+}
