@@ -34,15 +34,15 @@ func (Utils) RemoveCookie(key string) *http.Cookie {
 }
 
 func (Utils) GetCookieValueAsInt(key string, context echo.Context) (int, bool) {
-	Authentication, err := context.Cookie(key)
+	cookie, err := context.Cookie(key)
 	if err != nil {
 		return 0, false
 	}
 
-	userId, err := strconv.Atoi(Authentication.Value)
+	cookieValueAsInt, err := strconv.Atoi(cookie.Value)
 	if err != nil {
 		return 0, false
 	}
 
-	return userId, true
+	return cookieValueAsInt, true
 }
